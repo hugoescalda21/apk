@@ -22,6 +22,9 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // Setup toolbar
+        setSupportActionBar(binding.toolbar)
+
         publisherViewModel = ViewModelProvider(this)[PublisherViewModel::class.java]
         reportViewModel = ViewModelProvider(this)[ReportViewModel::class.java]
 
