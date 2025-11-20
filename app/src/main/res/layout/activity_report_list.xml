@@ -12,29 +12,60 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:orientation="vertical"
             android:padding="16dp">
 
-            <Spinner
-                android:id="@+id/spinnerMonth"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginEnd="8dp" />
+                android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/spinnerYear"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:layout_marginStart="8dp" />
+                <Spinner
+                    android:id="@+id/spinnerMonth"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginEnd="8dp" />
 
-            <Button
-                android:id="@+id/buttonLoadReports"
-                android:layout_width="wrap_content"
+                <Spinner
+                    android:id="@+id/spinnerYear"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginStart="8dp" />
+
+                <Button
+                    android:id="@+id/buttonLoadReports"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Cargar"
+                    android:layout_marginStart="8dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Cargar"
-                android:layout_marginStart="8dp" />
+                android:orientation="horizontal"
+                android:layout_marginTop="8dp">
+
+                <Button
+                    android:id="@+id/buttonExportPdf"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Exportar PDF"
+                    android:layout_marginEnd="4dp"
+                    style="@style/Widget.Material3.Button.OutlinedButton" />
+
+                <Button
+                    android:id="@+id/buttonExportExcel"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Exportar Excel"
+                    android:layout_marginStart="4dp"
+                    style="@style/Widget.Material3.Button.OutlinedButton" />
+            </LinearLayout>
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView

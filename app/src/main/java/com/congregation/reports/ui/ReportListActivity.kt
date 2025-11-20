@@ -3,13 +3,21 @@ package com.congregation.reports.ui
 import android.content.Intent
 import android.os.Bundle
 import android.widget.ArrayAdapter
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.congregation.reports.data.Publisher
+import com.congregation.reports.data.Report
 import com.congregation.reports.databinding.ActivityReportListBinding
 import com.congregation.reports.ui.adapters.ReportAdapter
+import com.congregation.reports.utils.ExcelExporter
+import com.congregation.reports.utils.PdfExporter
 import com.congregation.reports.viewmodel.ReportViewModel
 import com.congregation.reports.viewmodel.PublisherViewModel
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 class ReportListActivity : AppCompatActivity() {
@@ -20,6 +28,8 @@ class ReportListActivity : AppCompatActivity() {
 
     private var currentMonth: Int = 0
     private var currentYear: Int = 0
+    private var currentReports: List<Report> = emptyList()
+    private var currentPublishers: List<Publisher> = emptyList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,7 +49,9 @@ class ReportListActivity : AppCompatActivity() {
         setupMonthYearSpinners()
         setupRecyclerView()
         setupFab()
+        setupExportButtons()
         loadReports()
+        loadPublishers()
     }
 
     private fun setupMonthYearSpinners() {
@@ -93,7 +105,108 @@ class ReportListActivity : AppCompatActivity() {
     private fun loadReports() {
         reportViewModel.getReportsByMonth(currentMonth, currentYear).observe(this) { reports ->
             reports?.let {
+                currentReports = it
                 adapter.submitList(it)
+            }
+        }
+    }
+
+    private fun loadPublishers() {
+        publisherViewModel.allPublishers.observe(this) { publishers ->
+            publishers?.let {
+                currentPublishers = it
+            }
+        }
+    }
+
+    private fun setupExportButtons() {
+        binding.buttonExportPdf.setOnClickListener {
+            exportToPdf()
+        }
+
+        binding.buttonExportExcel.setOnClickListener {
+            exportToExcel()
+        }
+    }
+
+    private fun exportToPdf() {
+        lifecycleScope.launch {
+            val pdfExporter = PdfExporter(this@ReportListActivity)
+            val file = pdfExporter.exportMonthlyReport(
+                currentMonth,
+                currentYear,
+                currentPublishers,
+                currentReports
+            )
+
+            if (file != null) {
+                Toast.makeText(
+                    this@ReportListActivity,
+                    "PDF guardado en: ${file.absolutePath}",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                // Share file
+                val uri = FileProvider.getUriForFile(
+                    this@ReportListActivity,
+                    "${packageName}.fileprovider",
+                    file
+                )
+
+                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                    type = "application/pdf"
+                    putExtra(Intent.EXTRA_STREAM, uri)
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
+
+                startActivity(Intent.createChooser(shareIntent, "Compartir PDF"))
+            } else {
+                Toast.makeText(
+                    this@ReportListActivity,
+                    "Error al generar PDF",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
+    }
+
+    private fun exportToExcel() {
+        lifecycleScope.launch {
+            val excelExporter = ExcelExporter(this@ReportListActivity)
+            val file = excelExporter.exportMonthlyReport(
+                currentMonth,
+                currentYear,
+                currentPublishers,
+                currentReports
+            )
+
+            if (file != null) {
+                Toast.makeText(
+                    this@ReportListActivity,
+                    "Excel guardado en: ${file.absolutePath}",
+                    Toast.LENGTH_LONG
+                ).show()
+
+                // Share file
+                val uri = FileProvider.getUriForFile(
+                    this@ReportListActivity,
+                    "${packageName}.fileprovider",
+                    file
+                )
+
+                val shareIntent = Intent(Intent.ACTION_SEND).apply {
+                    type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+                    putExtra(Intent.EXTRA_STREAM, uri)
+                    addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+                }
+
+                startActivity(Intent.createChooser(shareIntent, "Compartir Excel"))
+            } else {
+                Toast.makeText(
+                    this@ReportListActivity,
+                    "Error al generar Excel",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
