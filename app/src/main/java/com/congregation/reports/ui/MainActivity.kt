@@ -156,7 +156,7 @@ class MainActivity : AppCompatActivity() {
         // Observe publishers to populate dropdown
         publisherViewModel.allPublishers.observe(this) { publishersList ->
             publishers = publishersList
-            val publisherNames = publishersList.map { "${it.name} ${it.lastName}" }
+            val publisherNames = publishersList.map { it.name }
             val adapter = ArrayAdapter(this, android.R.layout.simple_dropdown_item_1line, publisherNames)
             bottomSheetBinding.autoCompletePublisher.setAdapter(adapter)
         }
