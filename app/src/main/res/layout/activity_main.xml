@@ -32,31 +32,30 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="24dp">
 
             <!-- Header Summary Card -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
-                app:cardCornerRadius="16dp"
-                app:cardElevation="4dp"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="28dp"
+                app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/primary_light">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:padding="20dp">
+                    android:padding="24dp">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Resumen del Mes"
-                        android:textSize="18sp"
-                        android:textStyle="bold"
+                        style="@style/TextAppearance.App.TitleLarge"
                         android:textColor="@color/primary_dark"
-                        android:layout_marginBottom="12dp"/>
+                        android:layout_marginBottom="16dp"/>
 
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -76,15 +75,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0"
-                                android:textSize="32sp"
-                                android:textStyle="bold"
+                                style="@style/TextAppearance.App.DisplaySmall"
                                 android:textColor="@color/primary_dark"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Informes"
-                                android:textSize="13sp"
+                                style="@style/TextAppearance.App.BodyMedium"
                                 android:textColor="@color/text_secondary"/>
 
                         </LinearLayout>
@@ -108,15 +106,14 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="0"
-                                android:textSize="32sp"
-                                android:textStyle="bold"
+                                style="@style/TextAppearance.App.DisplaySmall"
                                 android:textColor="@color/primary_dark"/>
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Horas Totales"
-                                android:textSize="13sp"
+                                style="@style/TextAppearance.App.BodyMedium"
                                 android:textColor="@color/text_secondary"/>
 
                         </LinearLayout>
@@ -131,10 +128,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Gestión"
-                android:textSize="16sp"
-                android:textStyle="bold"
+                style="@style/TextAppearance.App.TitleMedium"
                 android:textColor="@color/text_primary"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="16dp"
                 android:layout_marginStart="4dp"/>
 
             <!-- Publishers Card -->
@@ -142,9 +138,9 @@
                 android:id="@+id/cardPublishers"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="3dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/card_publishers">
 
                 <LinearLayout
@@ -174,17 +170,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Publicadores"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
+                            style="@style/TextAppearance.App.CardTitle"
                             android:textColor="@color/white"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Administrar publicadores"
-                            android:textSize="13sp"
-                            android:textColor="#E0FFFFFF"
-                            android:layout_marginTop="2dp"/>
+                            style="@style/TextAppearance.App.CardSubtitle"
+                            android:layout_marginTop="4dp"/>
 
                     </LinearLayout>
 
@@ -208,9 +202,9 @@
                 android:id="@+id/cardReports"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="3dp"
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/card_reports">
 
                 <LinearLayout
@@ -240,17 +234,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Informes"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
+                            style="@style/TextAppearance.App.CardTitle"
                             android:textColor="@color/white"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Registrar informes mensuales"
-                            android:textSize="13sp"
-                            android:textColor="#E0FFFFFF"
-                            android:layout_marginTop="2dp"/>
+                            style="@style/TextAppearance.App.CardSubtitle"
+                            android:layout_marginTop="4dp"/>
 
                     </LinearLayout>
 
@@ -272,9 +264,9 @@
                 android:id="@+id/cardMeetings"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="12dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="3dp"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/card_meetings">
 
                 <LinearLayout
@@ -304,17 +296,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Reuniones"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
+                            style="@style/TextAppearance.App.CardTitle"
                             android:textColor="@color/white"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Gestionar asistencia"
-                            android:textSize="13sp"
-                            android:textColor="#E0FFFFFF"
-                            android:layout_marginTop="2dp"/>
+                            style="@style/TextAppearance.App.CardSubtitle"
+                            android:layout_marginTop="4dp"/>
 
                     </LinearLayout>
 
@@ -335,11 +325,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Herramientas"
-                android:textSize="16sp"
-                android:textStyle="bold"
+                style="@style/TextAppearance.App.TitleMedium"
                 android:textColor="@color/text_primary"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="12dp"
+                android:layout_marginBottom="16dp"
                 android:layout_marginStart="4dp"/>
 
             <!-- Two Column Cards -->
@@ -353,12 +341,12 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardStats"
                     android:layout_width="0dp"
-                    android:layout_height="140dp"
+                    android:layout_height="150dp"
                     android:layout_weight="1"
-                    android:layout_marginEnd="6dp"
-                    android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="3dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="2dp"
                     app:cardBackgroundColor="@color/card_stats">
 
                     <LinearLayout
@@ -379,8 +367,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Estadísticas"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
+                            style="@style/TextAppearance.App.TitleMedium"
                             android:textColor="@color/white"
                             android:gravity="center"/>
 
@@ -388,7 +375,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Ver gráficos"
-                            android:textSize="12sp"
+                            style="@style/TextAppearance.App.BodySmall"
                             android:textColor="#E0FFFFFF"
                             android:layout_marginTop="4dp"
                             android:gravity="center"/>
@@ -401,12 +388,12 @@
                 <com.google.android.material.card.MaterialCardView
                     android:id="@+id/cardStatus"
                     android:layout_width="0dp"
-                    android:layout_height="140dp"
+                    android:layout_height="150dp"
                     android:layout_weight="1"
-                    android:layout_marginStart="6dp"
-                    android:layout_marginBottom="12dp"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="3dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginBottom="16dp"
+                    app:cardCornerRadius="20dp"
+                    app:cardElevation="2dp"
                     app:cardBackgroundColor="@color/card_status">
 
                     <LinearLayout
@@ -428,8 +415,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Estado"
-                            android:textSize="16sp"
-                            android:textStyle="bold"
+                            style="@style/TextAppearance.App.TitleMedium"
                             android:textColor="@color/white"
                             android:gravity="center"/>
 
@@ -437,7 +423,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Ver entregados"
-                            android:textSize="12sp"
+                            style="@style/TextAppearance.App.BodySmall"
                             android:textColor="#E0FFFFFF"
                             android:layout_marginTop="4dp"
                             android:gravity="center"/>
@@ -453,9 +439,9 @@
                 android:id="@+id/cardBackup"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                app:cardCornerRadius="12dp"
-                app:cardElevation="3dp"
+                android:layout_marginBottom="24dp"
+                app:cardCornerRadius="20dp"
+                app:cardElevation="2dp"
                 app:cardBackgroundColor="@color/card_backup">
 
                 <LinearLayout
@@ -485,17 +471,15 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Respaldo"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
+                            style="@style/TextAppearance.App.CardTitle"
                             android:textColor="@color/white"/>
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="Proteger tus datos"
-                            android:textSize="13sp"
-                            android:textColor="#E0FFFFFF"
-                            android:layout_marginTop="2dp"/>
+                            style="@style/TextAppearance.App.CardSubtitle"
+                            android:layout_marginTop="4dp"/>
 
                     </LinearLayout>
 

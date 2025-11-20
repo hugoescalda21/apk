@@ -4,7 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
+import android.view.animation.AnimationUtils
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.ViewModelProvider
 import com.congregation.reports.R
 import com.congregation.reports.databinding.ActivityMainBinding
@@ -34,28 +37,49 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupUI() {
         binding.cardPublishers.setOnClickListener {
-            startActivity(Intent(this, PublisherListActivity::class.java))
+            animateCardClick(it)
+            startActivityWithAnimation(PublisherListActivity::class.java)
         }
 
         binding.cardReports.setOnClickListener {
-            startActivity(Intent(this, ReportListActivity::class.java))
+            animateCardClick(it)
+            startActivityWithAnimation(ReportListActivity::class.java)
         }
 
         binding.cardMeetings.setOnClickListener {
-            startActivity(Intent(this, MeetingListActivity::class.java))
+            animateCardClick(it)
+            startActivityWithAnimation(MeetingListActivity::class.java)
         }
 
         binding.cardBackup.setOnClickListener {
-            startActivity(Intent(this, BackupActivity::class.java))
+            animateCardClick(it)
+            startActivityWithAnimation(BackupActivity::class.java)
         }
 
         binding.cardStatus.setOnClickListener {
-            startActivity(Intent(this, ReportStatusActivity::class.java))
+            animateCardClick(it)
+            startActivityWithAnimation(ReportStatusActivity::class.java)
         }
 
         binding.cardStats.setOnClickListener {
-            startActivity(Intent(this, StatisticsActivity::class.java))
+            animateCardClick(it)
+            startActivityWithAnimation(StatisticsActivity::class.java)
         }
+    }
+
+    private fun animateCardClick(view: View) {
+        val scaleUp = AnimationUtils.loadAnimation(this, R.anim.scale_up)
+        view.startAnimation(scaleUp)
+    }
+
+    private fun startActivityWithAnimation(activityClass: Class<*>) {
+        val intent = Intent(this, activityClass)
+        val options = ActivityOptionsCompat.makeCustomAnimation(
+            this,
+            R.anim.slide_in_right,
+            R.anim.slide_out_left
+        )
+        startActivity(intent, options.toBundle())
     }
 
     private fun observeData() {
