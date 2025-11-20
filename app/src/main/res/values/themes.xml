@@ -11,4 +11,9 @@
     <style name="Theme.CongregationReports" parent="Base.Theme.CongregationReports">
         <item name="android:windowContentTransitions">true</item>
     </style>
+
+    <style name="Theme.CongregationReports.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 </resources>
