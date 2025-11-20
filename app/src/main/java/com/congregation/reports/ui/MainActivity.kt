@@ -139,6 +139,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
+            R.id.action_comparative_reports -> {
+                startActivity(Intent(this, ComparativeReportsActivity::class.java))
+                true
+            }
             R.id.action_security -> {
                 startActivity(Intent(this, SecuritySettingsActivity::class.java))
                 true

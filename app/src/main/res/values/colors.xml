@@ -34,6 +34,8 @@
     <!-- Status Colors -->
     <color name="success">#4CAF50</color>
     <color name="warning">#FFC107</color>
+    <color name="warning_light">#FFF8E1</color>
+    <color name="warning_dark">#F57C00</color>
     <color name="error">#F44336</color>
     <color name="info">#2196F3</color>
 

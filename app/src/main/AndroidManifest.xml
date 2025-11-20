@@ -3,6 +3,8 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
 
     <application
         android:name=".CongregationReportsApp"
@@ -79,6 +81,11 @@
         <activity
             android:name=".ui.SecuritySettingsActivity"
             android:label="Configuración de Seguridad"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity
+            android:name=".ui.ComparativeReportsActivity"
+            android:label="Reportes Comparativos"
             android:parentActivityName=".ui.MainActivity" />
 
         <provider

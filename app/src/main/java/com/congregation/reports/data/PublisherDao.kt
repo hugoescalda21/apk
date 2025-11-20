@@ -25,4 +25,7 @@ interface PublisherDao {
 
     @Query("SELECT COUNT(*) FROM publishers WHERE isActive = 1")
     fun getActivePublishersCount(): LiveData<Int>
+
+    @Query("SELECT * FROM publishers WHERE isActive = 1 ORDER BY name ASC")
+    suspend fun getActivePublishersSync(): List<Publisher>
 }

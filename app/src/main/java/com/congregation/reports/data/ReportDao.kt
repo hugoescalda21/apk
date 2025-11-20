@@ -28,4 +28,7 @@ interface ReportDao {
 
     @Query("SELECT SUM(hours) FROM reports WHERE month = :month AND year = :year")
     fun getTotalHoursForMonth(month: Int, year: Int): LiveData<Int>
+
+    @Query("SELECT * FROM reports WHERE month = :month AND year = :year ORDER BY publisherId")
+    suspend fun getReportsForMonthSync(month: Int, year: Int): List<Report>
 }
