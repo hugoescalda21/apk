@@ -38,6 +38,10 @@ class MainActivity : AppCompatActivity() {
         binding.cardMeetings.setOnClickListener {
             startActivity(Intent(this, MeetingListActivity::class.java))
         }
+
+        binding.cardBackup.setOnClickListener {
+            startActivity(Intent(this, BackupActivity::class.java))
+        }
     }
 
     private fun observeData() {

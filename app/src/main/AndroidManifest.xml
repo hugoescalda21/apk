@@ -53,6 +53,11 @@
             android:label="Detalle Reunión"
             android:parentActivityName=".ui.MeetingListActivity" />
 
+        <activity
+            android:name=".ui.BackupActivity"
+            android:label="Respaldo de Datos"
+            android:parentActivityName=".ui.MainActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
