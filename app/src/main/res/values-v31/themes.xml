@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Material 3 Dynamic Color Theme for Android 12+ -->
+    <style name="Base.Theme.CongregationReports" parent="Theme.Material3.DayNight">
+        <!-- Enable dynamic colors from wallpaper -->
+        <item name="colorPrimary">@android:color/system_accent1_500</item>
+        <item name="colorOnPrimary">@android:color/system_accent1_0</item>
+        <item name="colorPrimaryContainer">@android:color/system_accent1_100</item>
+        <item name="colorOnPrimaryContainer">@android:color/system_accent1_900</item>
+
+        <item name="colorSecondary">@android:color/system_accent2_500</item>
+        <item name="colorOnSecondary">@android:color/system_accent2_0</item>
+        <item name="colorSecondaryContainer">@android:color/system_accent2_100</item>
+        <item name="colorOnSecondaryContainer">@android:color/system_accent2_900</item>
+
+        <item name="colorTertiary">@android:color/system_accent3_500</item>
+        <item name="colorOnTertiary">@android:color/system_accent3_0</item>
+        <item name="colorTertiaryContainer">@android:color/system_accent3_100</item>
+        <item name="colorOnTertiaryContainer">@android:color/system_accent3_900</item>
+
+        <!-- Surface colors -->
+        <item name="colorSurface">@android:color/system_neutral1_50</item>
+        <item name="colorOnSurface">@android:color/system_neutral1_900</item>
+        <item name="colorSurfaceVariant">@android:color/system_neutral2_100</item>
+        <item name="colorOnSurfaceVariant">@android:color/system_neutral2_700</item>
+
+        <!-- Background -->
+        <item name="android:colorBackground">@android:color/system_neutral1_50</item>
+        <item name="colorOnBackground">@android:color/system_neutral1_900</item>
+
+        <!-- Status bar -->
+        <item name="android:statusBarColor">@android:color/transparent</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:navigationBarColor">@android:color/transparent</item>
+
+        <!-- Window -->
+        <item name="android:windowBackground">@android:color/system_neutral1_50</item>
+
+        <!-- Material 3 Expressive shapes -->
+        <item name="shapeAppearanceSmallComponent">@style/ShapeAppearance.App.SmallComponent</item>
+        <item name="shapeAppearanceMediumComponent">@style/ShapeAppearance.App.MediumComponent</item>
+        <item name="shapeAppearanceLargeComponent">@style/ShapeAppearance.App.LargeComponent</item>
+
+        <!-- Elevation overlays -->
+        <item name="elevationOverlayEnabled">true</item>
+        <item name="elevationOverlayColor">@android:color/system_accent1_500</item>
+
+        <!-- Typography -->
+        <item name="textAppearanceDisplayLarge">@style/TextAppearance.App.DisplayLarge</item>
+        <item name="textAppearanceDisplayMedium">@style/TextAppearance.App.DisplayMedium</item>
+        <item name="textAppearanceDisplaySmall">@style/TextAppearance.App.DisplaySmall</item>
+        <item name="textAppearanceHeadlineLarge">@style/TextAppearance.App.HeadlineLarge</item>
+        <item name="textAppearanceHeadlineMedium">@style/TextAppearance.App.HeadlineMedium</item>
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.App.HeadlineSmall</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.App.TitleLarge</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.App.TitleMedium</item>
+        <item name="textAppearanceTitleSmall">@style/TextAppearance.App.TitleSmall</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.App.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.App.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.App.BodySmall</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.App.LabelLarge</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.App.LabelMedium</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.App.LabelSmall</item>
+    </style>
+</resources>
