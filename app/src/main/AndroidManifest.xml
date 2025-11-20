@@ -2,6 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -57,6 +59,21 @@
             android:name=".ui.BackupActivity"
             android:label="Respaldo de Datos"
             android:parentActivityName=".ui.MainActivity" />
+
+        <activity
+            android:name=".ui.StatisticsActivity"
+            android:label="Estadísticas"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity
+            android:name=".ui.ReportStatusActivity"
+            android:label="Estado de Informes"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity
+            android:name=".ui.SecurityActivity"
+            android:label="Seguridad"
+            android:exported="false" />
 
         <provider
             android:name="androidx.core.content.FileProvider"

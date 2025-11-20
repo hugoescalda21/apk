@@ -42,6 +42,14 @@ class MainActivity : AppCompatActivity() {
         binding.cardBackup.setOnClickListener {
             startActivity(Intent(this, BackupActivity::class.java))
         }
+
+        binding.cardStatus.setOnClickListener {
+            startActivity(Intent(this, ReportStatusActivity::class.java))
+        }
+
+        binding.cardStats.setOnClickListener {
+            startActivity(Intent(this, StatisticsActivity::class.java))
+        }
     }
 
     private fun observeData() {
