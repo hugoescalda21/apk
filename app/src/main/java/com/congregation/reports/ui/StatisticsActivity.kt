@@ -128,14 +128,18 @@ class StatisticsActivity : AppCompatActivity() {
     }
 
     private fun updateLineChart(labels: List<String>, data: List<Entry>) {
-        if (data.isEmpty()) {
+        val chartData = if (data.isEmpty()) {
             // Add dummy data for visualization
-            for (i in labels.indices) {
-                data.add(Entry(i.toFloat(), (Math.random() * 100).toFloat()))
+            mutableListOf<Entry>().apply {
+                for (i in labels.indices) {
+                    add(Entry(i.toFloat(), (Math.random() * 100).toFloat()))
+                }
             }
+        } else {
+            data
         }
 
-        val dataSet = LineDataSet(data, "Publicaciones").apply {
+        val dataSet = LineDataSet(chartData, "Publicaciones").apply {
             color = Color.parseColor("#FF9800")
             lineWidth = 2f
             setCircleColor(Color.parseColor("#FF9800"))
