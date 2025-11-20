@@ -2,8 +2,11 @@ package com.congregation.reports.ui
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
+import com.congregation.reports.R
 import com.congregation.reports.databinding.ActivityMainBinding
 import com.congregation.reports.viewmodel.PublisherViewModel
 import com.congregation.reports.viewmodel.ReportViewModel
@@ -67,6 +70,21 @@ class MainActivity : AppCompatActivity() {
 
         reportViewModel.getTotalHoursForMonth(month, year).observe(this) { hours ->
             binding.textTotalHours.text = hours?.toString() ?: "0"
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.main_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_security -> {
+                startActivity(Intent(this, SecuritySettingsActivity::class.java))
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 }

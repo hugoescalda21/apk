@@ -75,6 +75,11 @@
             android:label="Seguridad"
             android:exported="false" />
 
+        <activity
+            android:name=".ui.SecuritySettingsActivity"
+            android:label="Configuración de Seguridad"
+            android:parentActivityName=".ui.MainActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"
