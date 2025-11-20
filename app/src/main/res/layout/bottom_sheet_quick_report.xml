@@ -22,6 +22,10 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Publicador"
+        app:helperText="Selecciona el publicador que está entregando el informe"
+        app:helperTextEnabled="true"
+        app:startIconDrawable="@android:drawable/ic_menu_my_calendar"
+        app:startIconTint="@color/primary"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
         app:boxCornerRadiusTopStart="16dp"
         app:boxCornerRadiusTopEnd="16dp"
@@ -39,9 +43,12 @@
 
     <!-- Hours -->
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutHours"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Horas"
+        app:helperText="Ejemplo: 10"
+        app:helperTextEnabled="true"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         app:boxCornerRadiusTopStart="16dp"
         app:boxCornerRadiusTopEnd="16dp"
@@ -60,9 +67,12 @@
 
     <!-- Publications -->
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutPublications"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Publicaciones"
+        app:helperText="Ejemplo: 5 (revistas, folletos, etc.)"
+        app:helperTextEnabled="true"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         app:boxCornerRadiusTopStart="16dp"
         app:boxCornerRadiusTopEnd="16dp"
@@ -80,9 +90,12 @@
 
     <!-- Videos -->
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutVideos"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Videos"
+        app:helperText="Ejemplo: 3"
+        app:helperTextEnabled="true"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         app:boxCornerRadiusTopStart="16dp"
         app:boxCornerRadiusTopEnd="16dp"
@@ -100,9 +113,12 @@
 
     <!-- Return Visits -->
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutReturnVisits"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Revisitas"
+        app:helperText="Ejemplo: 2"
+        app:helperTextEnabled="true"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         app:boxCornerRadiusTopStart="16dp"
         app:boxCornerRadiusTopEnd="16dp"
@@ -120,9 +136,12 @@
 
     <!-- Bible Studies -->
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layoutBibleStudies"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Estudios Bíblicos"
+        app:helperText="Ejemplo: 1"
+        app:helperTextEnabled="true"
         style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
         app:boxCornerRadiusTopStart="16dp"
         app:boxCornerRadiusTopEnd="16dp"

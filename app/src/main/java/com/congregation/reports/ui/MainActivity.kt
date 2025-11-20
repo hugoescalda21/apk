@@ -10,6 +10,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
+import androidx.core.widget.doAfterTextChanged
 import androidx.lifecycle.ViewModelProvider
 import com.congregation.reports.R
 import com.congregation.reports.data.Publisher
@@ -19,6 +20,7 @@ import com.congregation.reports.databinding.BottomSheetQuickReportBinding
 import com.congregation.reports.viewmodel.PublisherViewModel
 import com.congregation.reports.viewmodel.ReportViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.snackbar.Snackbar
 import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
@@ -165,17 +167,45 @@ class MainActivity : AppCompatActivity() {
             selectedPublisher = publishers[position]
         }
 
+        // Validación en tiempo real para horas
+        bottomSheetBinding.editTextHours.doAfterTextChanged { text ->
+            val hours = text.toString().toIntOrNull()
+            when {
+                text.isNullOrEmpty() -> {
+                    bottomSheetBinding.layoutHours.error = null
+                }
+                hours != null && hours > 300 -> {
+                    bottomSheetBinding.layoutHours.error = "¿Más de 300 horas al mes? Verifica el número"
+                }
+                hours != null && hours < 0 -> {
+                    bottomSheetBinding.layoutHours.error = "Las horas no pueden ser negativas"
+                }
+                else -> {
+                    bottomSheetBinding.layoutHours.error = null
+                }
+            }
+        }
+
         bottomSheetBinding.buttonCancel.setOnClickListener {
             bottomSheetDialog.dismiss()
         }
 
         bottomSheetBinding.buttonSave.setOnClickListener {
+            // Validación antes de guardar
             if (selectedPublisher == null) {
-                Toast.makeText(this, "Selecciona un publicador", Toast.LENGTH_SHORT).show()
+                bottomSheetBinding.layoutPublisher.error = "Debes seleccionar un publicador"
+                Snackbar.make(bottomSheetBinding.root, "⚠️ Selecciona un publicador", Snackbar.LENGTH_LONG).show()
                 return@setOnClickListener
             }
 
             val hours = bottomSheetBinding.editTextHours.text.toString().toIntOrNull() ?: 0
+
+            // Validar horas
+            if (hours > 300) {
+                bottomSheetBinding.layoutHours.error = "Verifica las horas"
+                return@setOnClickListener
+            }
+
             val publications = bottomSheetBinding.editTextPublications.text.toString().toIntOrNull() ?: 0
             val videos = bottomSheetBinding.editTextVideos.text.toString().toIntOrNull() ?: 0
             val returnVisits = bottomSheetBinding.editTextReturnVisits.text.toString().toIntOrNull() ?: 0
@@ -197,7 +227,16 @@ class MainActivity : AppCompatActivity() {
             )
 
             reportViewModel.insert(report)
-            Toast.makeText(this, "Informe guardado", Toast.LENGTH_SHORT).show()
+
+            // Snackbar con mejor feedback
+            Snackbar.make(
+                binding.root,
+                "✓ Informe de ${selectedPublisher!!.name} guardado correctamente",
+                Snackbar.LENGTH_LONG
+            ).setAction("Ver") {
+                startActivityWithAnimation(ReportListActivity::class.java)
+            }.show()
+
             bottomSheetDialog.dismiss()
         }
 
