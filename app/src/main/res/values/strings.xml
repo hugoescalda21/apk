@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Informes Congregación</string>
+
+    <!-- Main Activity -->
+    <string name="dashboard_title">Informes de la Congregación</string>
+    <string name="publishers_label">Publicadores</string>
+    <string name="reports_label">Informes del Mes</string>
+    <string name="meetings_label">Reuniones</string>
+    <string name="manage_attendance">Gestionar asistencia</string>
+
+    <!-- Publisher -->
+    <string name="add_publisher">Agregar Publicador</string>
+    <string name="edit_publisher">Editar Publicador</string>
+    <string name="publisher_name">Nombre completo</string>
+    <string name="publisher_phone">Teléfono</string>
+    <string name="publisher_email">Email</string>
+    <string name="publisher_type">Tipo de publicador</string>
+    <string name="publisher_active">Activo</string>
+    <string name="no_phone">Sin teléfono</string>
+
+    <!-- Reports -->
+    <string name="add_report">Agregar Informe</string>
+    <string name="edit_report">Editar Informe</string>
+    <string name="report_month">Mes (1-12)</string>
+    <string name="report_year">Año</string>
+    <string name="report_hours">Horas</string>
+    <string name="report_publications">Publicaciones</string>
+    <string name="report_videos">Videos</string>
+    <string name="report_return_visits">Revisitas</string>
+    <string name="report_bible_studies">Estudios bíblicos</string>
+    <string name="report_comments">Comentarios</string>
+    <string name="load_reports">Cargar</string>
+    <string name="hours_label">Horas: %d</string>
+    <string name="publications_label">Pub: %d</string>
+    <string name="studies_label">Est: %d</string>
+
+    <!-- Meetings -->
+    <string name="add_meeting">Agregar Reunión</string>
+    <string name="edit_meeting">Editar Reunión</string>
+    <string name="meeting_type">Tipo de reunión</string>
+    <string name="meeting_date">Fecha de la reunión</string>
+    <string name="select_date">Seleccionar fecha</string>
+    <string name="change_date">Cambiar</string>
+    <string name="total_attendance">Asistencia total</string>
+    <string name="attendance_label">Asistencia: %d</string>
+    <string name="attendance_registration">Registro de Asistencia</string>
+    <string name="mark_all_present">Marcar todos presentes</string>
+
+    <!-- Actions -->
+    <string name="save">Guardar</string>
+    <string name="delete">Eliminar</string>
+    <string name="cancel">Cancelar</string>
+
+    <!-- Messages -->
+    <string name="name_required">El nombre es obligatorio</string>
+    <string name="invalid_month">Mes inválido (1-12)</string>
+    <string name="no_publishers">No hay publicadores disponibles</string>
+    <string name="publisher_saved">Publicador guardado</string>
+    <string name="publisher_updated">Publicador actualizado</string>
+    <string name="publisher_deleted">Publicador eliminado</string>
+    <string name="report_saved">Informe creado</string>
+    <string name="report_updated">Informe actualizado</string>
+    <string name="report_deleted">Informe eliminado</string>
+    <string name="meeting_saved">Reunión creada</string>
+    <string name="meeting_updated">Reunión actualizada</string>
+    <string name="meeting_deleted">Reunión eliminada</string>
+</resources>
