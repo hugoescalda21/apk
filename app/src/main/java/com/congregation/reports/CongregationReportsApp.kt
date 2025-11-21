@@ -1,6 +1,7 @@
 package com.congregation.reports
 
 import android.app.Application
+import android.content.Context
 import android.os.Build
 import com.congregation.reports.utils.NotificationScheduler
 import com.google.android.material.color.DynamicColors
@@ -14,7 +15,12 @@ class CongregationReportsApp : Application() {
             DynamicColors.applyToActivitiesIfAvailable(this)
         }
 
-        // Schedule smart notifications
-        NotificationScheduler.scheduleAllNotifications(this)
+        // Schedule smart notifications only if enabled
+        val prefs = getSharedPreferences("security_prefs", Context.MODE_PRIVATE)
+        val notificationsEnabled = prefs.getBoolean("notifications_enabled", true)
+
+        if (notificationsEnabled) {
+            NotificationScheduler.scheduleAllNotifications(this)
+        }
     }
 }

@@ -3,10 +3,12 @@ package com.congregation.reports.ui
 import android.content.Context
 import android.os.Bundle
 import android.view.MenuItem
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
 import com.congregation.reports.databinding.ActivitySecuritySettingsBinding
+import com.congregation.reports.utils.NotificationScheduler
 
 class SecuritySettingsActivity : AppCompatActivity() {
     private lateinit var binding: ActivitySecuritySettingsBinding
@@ -29,6 +31,15 @@ class SecuritySettingsActivity : AppCompatActivity() {
 
         binding.switchSecurity.isChecked = isEnabled
         binding.cardPinSettings.isVisible = isEnabled
+
+        // Load notification settings
+        val notificationsEnabled = prefs.getBoolean("notifications_enabled", true)
+        binding.switchNotifications.isChecked = notificationsEnabled
+        binding.layoutNotificationOptions.visibility = if (notificationsEnabled) View.VISIBLE else View.GONE
+
+        binding.checkMonthlyReminder.isChecked = prefs.getBoolean("notify_monthly_reminder", true)
+        binding.checkPendingReports.isChecked = prefs.getBoolean("notify_pending_reports", true)
+        binding.checkInactivePublishers.isChecked = prefs.getBoolean("notify_inactive_publishers", true)
     }
 
     private fun setupListeners() {
@@ -49,6 +60,48 @@ class SecuritySettingsActivity : AppCompatActivity() {
 
         binding.buttonChangePin.setOnClickListener {
             changePin()
+        }
+
+        // Notification settings listeners
+        binding.switchNotifications.setOnCheckedChangeListener { _, isChecked ->
+            val prefs = getSharedPreferences("security_prefs", Context.MODE_PRIVATE)
+            prefs.edit().putBoolean("notifications_enabled", isChecked).apply()
+
+            binding.layoutNotificationOptions.visibility = if (isChecked) View.VISIBLE else View.GONE
+
+            if (isChecked) {
+                // Activate notifications
+                NotificationScheduler.scheduleAllNotifications(this)
+                Toast.makeText(this, "Notificaciones activadas", Toast.LENGTH_SHORT).show()
+            } else {
+                // Deactivate notifications
+                NotificationScheduler.cancelAllNotifications(this)
+                Toast.makeText(this, "Notificaciones desactivadas", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        binding.checkMonthlyReminder.setOnCheckedChangeListener { _, isChecked ->
+            val prefs = getSharedPreferences("security_prefs", Context.MODE_PRIVATE)
+            prefs.edit().putBoolean("notify_monthly_reminder", isChecked).apply()
+            if (binding.switchNotifications.isChecked) {
+                NotificationScheduler.scheduleAllNotifications(this)
+            }
+        }
+
+        binding.checkPendingReports.setOnCheckedChangeListener { _, isChecked ->
+            val prefs = getSharedPreferences("security_prefs", Context.MODE_PRIVATE)
+            prefs.edit().putBoolean("notify_pending_reports", isChecked).apply()
+            if (binding.switchNotifications.isChecked) {
+                NotificationScheduler.scheduleAllNotifications(this)
+            }
+        }
+
+        binding.checkInactivePublishers.setOnCheckedChangeListener { _, isChecked ->
+            val prefs = getSharedPreferences("security_prefs", Context.MODE_PRIVATE)
+            prefs.edit().putBoolean("notify_inactive_publishers", isChecked).apply()
+            if (binding.switchNotifications.isChecked) {
+                NotificationScheduler.scheduleAllNotifications(this)
+            }
         }
     }
 
