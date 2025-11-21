@@ -36,6 +36,12 @@ class ComparativeReportsActivity : AppCompatActivity() {
     private var currentMonth: Int = Calendar.getInstance().get(Calendar.MONTH) + 1
     private var currentYear: Int = Calendar.getInstance().get(Calendar.YEAR)
 
+    // Cache for comparison data
+    private var currentMonthHours = 0
+    private var prevMonthHours = 0
+    private var currentMonthReports = 0
+    private var prevMonthReports = 0
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityComparativeReportsBinding.inflate(layoutInflater)
@@ -106,43 +112,47 @@ class ComparativeReportsActivity : AppCompatActivity() {
             prevYear--
         }
 
-        // Load current month data
-        reportViewModel.getTotalHoursForMonth(currentMonth, currentYear).observe(this) { currentHours ->
-            val hours = currentHours ?: 0
-
-            // Load previous month data for comparison
-            reportViewModel.getTotalHoursForMonth(prevMonth, prevYear).observe(this) { prevHours ->
-                val previousHours = prevHours ?: 0
-                updateHoursComparison(hours, previousHours)
-            }
+        // Load hours for current month
+        reportViewModel.getTotalHoursForMonth(currentMonth, currentYear).observe(this) { hours ->
+            currentMonthHours = hours ?: 0
+            updateHoursComparison(currentMonthHours, prevMonthHours)
         }
 
-        reportViewModel.getReportsCountForMonth(currentMonth, currentYear).observe(this) { currentCount ->
-            val count = currentCount ?: 0
+        // Load hours for previous month
+        reportViewModel.getTotalHoursForMonth(prevMonth, prevYear).observe(this) { hours ->
+            prevMonthHours = hours ?: 0
+            updateHoursComparison(currentMonthHours, prevMonthHours)
+        }
 
-            reportViewModel.getReportsCountForMonth(prevMonth, prevYear).observe(this) { prevCount ->
-                val previousCount = prevCount ?: 0
-                updateReportsComparison(count, previousCount)
-            }
+        // Load reports count for current month
+        reportViewModel.getReportsCountForMonth(currentMonth, currentYear).observe(this) { count ->
+            currentMonthReports = count ?: 0
+            updateReportsComparison(currentMonthReports, prevMonthReports)
+        }
+
+        // Load reports count for previous month
+        reportViewModel.getReportsCountForMonth(prevMonth, prevYear).observe(this) { count ->
+            prevMonthReports = count ?: 0
+            updateReportsComparison(currentMonthReports, prevMonthReports)
         }
 
         // Calculate average hours per publisher
         publisherViewModel.activePublishersCount.observe(this) { publisherCount ->
-            reportViewModel.getTotalHoursForMonth(currentMonth, currentYear).observe(this) { hours ->
-                val avgHours = if (publisherCount != null && publisherCount > 0 && hours != null) {
-                    String.format("%.1f hrs", hours.toFloat() / publisherCount)
-                } else {
-                    "0 hrs"
-                }
-                binding.textAverageHours.text = avgHours
+            val avgHours = if (publisherCount != null && publisherCount > 0 && currentMonthHours > 0) {
+                String.format("%.1f hrs", currentMonthHours.toFloat() / publisherCount)
+            } else {
+                "0 hrs"
             }
+            binding.textAverageHours.text = avgHours
         }
 
-        // Load annual data
-        loadAnnualData()
+        // Load annual summary
+        binding.textAnnualSummary.text = "Total del año: calculando..."
+        binding.textMonthlyAverage.text = "Promedio mensual: calculando..."
 
         // Load irregular publishers
-        loadIrregularPublishers()
+        irregularPublishersAdapter.submitList(emptyList())
+        binding.textNoIrregular.visibility = View.VISIBLE
     }
 
     private fun updateHoursComparison(current: Int, previous: Int) {
@@ -152,22 +162,22 @@ class ComparativeReportsActivity : AppCompatActivity() {
             val percentChange = ((current - previous).toFloat() / previous * 100).toInt()
             val trend = when {
                 percentChange > 0 -> {
-                    binding.textHoursTrend.setTextColor(getColor(com.congregation.reports.R.color.success))
+                    binding.textHoursTrend.setTextColor(getColor(R.color.success))
                     "↑ $percentChange%"
                 }
                 percentChange < 0 -> {
-                    binding.textHoursTrend.setTextColor(getColor(com.congregation.reports.R.color.error))
+                    binding.textHoursTrend.setTextColor(getColor(R.color.error))
                     "↓ ${-percentChange}%"
                 }
                 else -> {
-                    binding.textHoursTrend.setTextColor(getColor(com.congregation.reports.R.color.text_secondary))
+                    binding.textHoursTrend.setTextColor(getColor(R.color.text_secondary))
                     "— 0%"
                 }
             }
             binding.textHoursTrend.text = trend
         } else {
             binding.textHoursTrend.text = "—"
-            binding.textHoursTrend.setTextColor(getColor(com.congregation.reports.R.color.text_secondary))
+            binding.textHoursTrend.setTextColor(getColor(R.color.text_secondary))
         }
     }
 
@@ -178,66 +188,23 @@ class ComparativeReportsActivity : AppCompatActivity() {
             val percentChange = ((current - previous).toFloat() / previous * 100).toInt()
             val trend = when {
                 percentChange > 0 -> {
-                    binding.textReportsTrend.setTextColor(getColor(com.congregation.reports.R.color.success))
+                    binding.textReportsTrend.setTextColor(getColor(R.color.success))
                     "↑ $percentChange%"
                 }
                 percentChange < 0 -> {
-                    binding.textReportsTrend.setTextColor(getColor(com.congregation.reports.R.color.error))
+                    binding.textReportsTrend.setTextColor(getColor(R.color.error))
                     "↓ ${-percentChange}%"
                 }
                 else -> {
-                    binding.textReportsTrend.setTextColor(getColor(com.congregation.reports.R.color.text_secondary))
+                    binding.textReportsTrend.setTextColor(getColor(R.color.text_secondary))
                     "— 0%"
                 }
             }
             binding.textReportsTrend.text = trend
         } else {
             binding.textReportsTrend.text = "—"
-            binding.textReportsTrend.setTextColor(getColor(com.congregation.reports.R.color.text_secondary))
+            binding.textReportsTrend.setTextColor(getColor(R.color.text_secondary))
         }
-    }
-
-    private fun loadAnnualData() {
-        // Calculate total hours for the year
-        var totalHours = 0
-        var monthsProcessed = 0
-        val targetMonths = if (currentMonth == 12) 12 else currentMonth
-
-        for (month in 1..targetMonths) {
-            reportViewModel.getTotalHoursForMonth(month, currentYear).observe(this) { hours ->
-                totalHours += hours ?: 0
-                monthsProcessed++
-
-                if (monthsProcessed == targetMonths) {
-                    binding.textAnnualSummary.text = "Total del año: $totalHours horas"
-                    val avgMonthly = if (targetMonths > 0) totalHours / targetMonths else 0
-                    binding.textMonthlyAverage.text = "Promedio mensual: $avgMonthly horas"
-                }
-            }
-        }
-    }
-
-    private fun loadIrregularPublishers() {
-        // Calculate two months ago
-        var twoMonthsAgo = currentMonth - 2
-        var yearTwoMonthsAgo = currentYear
-        if (twoMonthsAgo < 1) {
-            twoMonthsAgo += 12
-            yearTwoMonthsAgo--
-        }
-
-        var oneMonthAgo = currentMonth - 1
-        var yearOneMonthAgo = currentYear
-        if (oneMonthAgo < 1) {
-            oneMonthAgo = 12
-            yearOneMonthAgo--
-        }
-
-        // This is a simplified version - in a real implementation,
-        // you would query the database for publishers without reports in the last 2 months
-        // For now, just show placeholder
-        irregularPublishersAdapter.submitList(emptyList())
-        binding.textNoIrregular.visibility = View.VISIBLE
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -275,22 +242,24 @@ class ComparativeReportsActivity : AppCompatActivity() {
             }
         }
 
+        Snackbar.make(binding.root, "Generando PDF...", Snackbar.LENGTH_SHORT).show()
+
         lifecycleScope.launch {
             try {
                 val pdfFile = withContext(Dispatchers.IO) {
                     val pdfGenerator = PDFGenerator(this@ComparativeReportsActivity)
 
-                    // Fetch all publishers and their reports
-                    val publishers = publisherViewModel.allPublishers.value ?: emptyList()
-                    val reportsData = mutableListOf<Pair<com.congregation.reports.data.Publisher, com.congregation.reports.data.Report?>>()
+                    // Get data synchronously from database
+                    val database = com.congregation.reports.data.AppDatabase.getDatabase(this@ComparativeReportsActivity)
+                    val publishers = database.publisherDao().getActivePublishersSync()
+                    val reports = database.reportDao().getReportsForMonthSync(currentMonth, currentYear)
 
-                    var totalHours = 0
-                    for (publisher in publishers) {
-                        val report = reportViewModel.getReport(publisher.id, currentMonth, currentYear).value
-                        reportsData.add(Pair(publisher, report))
-                        totalHours += report?.hours ?: 0
+                    val reportsMap = reports.associateBy { it.publisherId }
+                    val reportsData = publishers.map { publisher ->
+                        Pair(publisher, reportsMap[publisher.id])
                     }
 
+                    val totalHours = reports.sumOf { it.hours }
                     val avgHours = if (publishers.isNotEmpty()) totalHours.toFloat() / publishers.size else 0f
 
                     pdfGenerator.generateMonthlyReport(
@@ -305,7 +274,7 @@ class ComparativeReportsActivity : AppCompatActivity() {
                 if (pdfFile != null) {
                     Snackbar.make(
                         binding.root,
-                        "PDF generado exitosamente en Descargas",
+                        "✓ PDF generado en Descargas",
                         Snackbar.LENGTH_LONG
                     ).setAction("Abrir") {
                         openPDF(pdfFile)
@@ -328,21 +297,23 @@ class ComparativeReportsActivity : AppCompatActivity() {
     }
 
     private fun generateAndSharePDF() {
+        Snackbar.make(binding.root, "Generando PDF...", Snackbar.LENGTH_SHORT).show()
+
         lifecycleScope.launch {
             try {
                 val pdfFile = withContext(Dispatchers.IO) {
                     val pdfGenerator = PDFGenerator(this@ComparativeReportsActivity)
 
-                    val publishers = publisherViewModel.allPublishers.value ?: emptyList()
-                    val reportsData = mutableListOf<Pair<com.congregation.reports.data.Publisher, com.congregation.reports.data.Report?>>()
+                    val database = com.congregation.reports.data.AppDatabase.getDatabase(this@ComparativeReportsActivity)
+                    val publishers = database.publisherDao().getActivePublishersSync()
+                    val reports = database.reportDao().getReportsForMonthSync(currentMonth, currentYear)
 
-                    var totalHours = 0
-                    for (publisher in publishers) {
-                        val report = reportViewModel.getReport(publisher.id, currentMonth, currentYear).value
-                        reportsData.add(Pair(publisher, report))
-                        totalHours += report?.hours ?: 0
+                    val reportsMap = reports.associateBy { it.publisherId }
+                    val reportsData = publishers.map { publisher ->
+                        Pair(publisher, reportsMap[publisher.id])
                     }
 
+                    val totalHours = reports.sumOf { it.hours }
                     val avgHours = if (publishers.isNotEmpty()) totalHours.toFloat() / publishers.size else 0f
 
                     pdfGenerator.generateMonthlyReport(
