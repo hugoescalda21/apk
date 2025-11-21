@@ -3,6 +3,10 @@ package com.congregation.reports.data
 import androidx.lifecycle.LiveData
 
 class AttendanceRepository(private val attendanceDao: AttendanceDao) {
+    fun getAllAttendances(): LiveData<List<Attendance>> {
+        return attendanceDao.getAllAttendances()
+    }
+
     fun getAttendanceByMeeting(meetingId: Long): LiveData<List<Attendance>> {
         return attendanceDao.getAttendanceByMeeting(meetingId)
     }

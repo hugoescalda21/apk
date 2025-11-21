@@ -5,6 +5,9 @@ import androidx.room.*
 
 @Dao
 interface AttendanceDao {
+    @Query("SELECT * FROM attendance")
+    fun getAllAttendances(): LiveData<List<Attendance>>
+
     @Query("SELECT * FROM attendance WHERE meetingId = :meetingId")
     fun getAttendanceByMeeting(meetingId: Long): LiveData<List<Attendance>>
 

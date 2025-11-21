@@ -11,10 +11,12 @@ import kotlinx.coroutines.launch
 
 class AttendanceViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: AttendanceRepository
+    val allAttendances: LiveData<List<Attendance>>
 
     init {
         val attendanceDao = AppDatabase.getDatabase(application).attendanceDao()
         repository = AttendanceRepository(attendanceDao)
+        allAttendances = repository.getAllAttendances()
     }
 
     fun getAttendanceByMeeting(meetingId: Long): LiveData<List<Attendance>> {
