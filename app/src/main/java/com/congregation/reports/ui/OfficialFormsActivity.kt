@@ -304,7 +304,6 @@ class OfficialFormsActivity : AppCompatActivity() {
         )
 
         var selectedMonth = currentMonth
-        var selectedYear = currentYear
 
         AlertDialog.Builder(this)
             .setTitle("Seleccionar Mes")

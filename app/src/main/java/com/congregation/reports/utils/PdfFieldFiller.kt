@@ -140,7 +140,7 @@ object PdfFieldFiller {
 
             if (form != null) {
                 // Información del mes
-                setFieldValue(form, "mes", monthName.capitalize(Locale.getDefault()))
+                setFieldValue(form, "mes", monthName.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() })
                 setFieldValue(form, "ano", year.toString())
 
                 // Número de publicadores por tipo
