@@ -8,28 +8,39 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
 
-    <!-- Professional Color Palette -->
-    <color name="primary">#1E88E5</color>
-    <color name="primary_dark">#1565C0</color>
-    <color name="primary_light">#E3F2FD</color>
-    <color name="accent">#FFA726</color>
-    <color name="accent_light">#FFE0B2</color>
+    <!-- Modern Vibrant Color Palette -->
+    <color name="primary">#6C63FF</color> <!-- Vibrant Purple -->
+    <color name="primary_dark">#5548C8</color>
+    <color name="primary_light">#E8E7FF</color>
+    <color name="accent">#FF6B9D</color> <!-- Pink accent -->
+    <color name="accent_light">#FFE5EE</color>
+    <color name="accent_secondary">#FEC260</color> <!-- Golden yellow -->
 
-    <color name="background">#F8F9FA</color>
+    <color name="background">#F7F8FC</color> <!-- Soft blue-white background -->
     <color name="card_background">#FFFFFF</color>
     <color name="surface">#FFFFFF</color>
 
-    <color name="text_primary">#1A1A1A</color>
-    <color name="text_secondary">#6C757D</color>
-    <color name="text_hint">#ADB5BD</color>
+    <color name="text_primary">#2D3142</color>
+    <color name="text_secondary">#7E84A3</color>
+    <color name="text_hint">#B8BDD8</color>
 
-    <!-- Card Colors -->
-    <color name="card_publishers">#5C6BC0</color>
-    <color name="card_reports">#26A69A</color>
-    <color name="card_meetings">#AB47BC</color>
-    <color name="card_backup">#FF7043</color>
-    <color name="card_stats">#42A5F5</color>
-    <color name="card_status">#66BB6A</color>
+    <!-- Modern Card Colors with Gradients -->
+    <color name="card_publishers">#7C3AED</color> <!-- Violet -->
+    <color name="card_publishers_gradient">#A78BFA</color>
+    <color name="card_reports">#14B8A6</color> <!-- Teal -->
+    <color name="card_reports_gradient">#5EEAD4</color>
+    <color name="card_meetings">#EC4899</color> <!-- Pink -->
+    <color name="card_meetings_gradient">#F472B6</color>
+    <color name="card_backup">#F59E0B</color> <!-- Amber -->
+    <color name="card_backup_gradient">#FCD34D</color>
+    <color name="card_stats">#3B82F6</color> <!-- Blue -->
+    <color name="card_stats_gradient">#60A5FA</color>
+    <color name="card_status">#10B981</color> <!-- Emerald -->
+    <color name="card_status_gradient">#6EE7B7</color>
+    <color name="card_groups">#8B5CF6</color> <!-- Purple -->
+    <color name="card_groups_gradient">#A78BFA</color>
+    <color name="card_forms">#06B6D4</color> <!-- Cyan -->
+    <color name="card_forms_gradient">#67E8F9</color>
 
     <!-- Status Colors -->
     <color name="success">#4CAF50</color>

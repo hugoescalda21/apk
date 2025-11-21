@@ -11,7 +11,12 @@ data class Publisher(
     val phoneNumber: String = "",
     val email: String = "",
     val type: PublisherType = PublisherType.PUBLICADOR,
-    val isActive: Boolean = true
+    val isActive: Boolean = true,
+    val groupId: Long? = null, // ID del grupo de predicación
+    val dateOfBirth: String = "", // Fecha de nacimiento para formularios
+    val dateOfBaptism: String = "", // Fecha de bautismo
+    val emergencyContact: String = "", // Contacto de emergencia
+    val address: String = "" // Dirección completa
 )
 
 enum class PublisherType {

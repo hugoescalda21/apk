@@ -88,6 +88,21 @@
             android:label="Reportes Comparativos"
             android:parentActivityName=".ui.MainActivity" />
 
+        <activity
+            android:name=".ui.FieldServiceGroupsActivity"
+            android:label="Grupos de Predicación"
+            android:parentActivityName=".ui.MainActivity" />
+
+        <activity
+            android:name=".ui.FieldServiceGroupDetailActivity"
+            android:label="Detalle de Grupo"
+            android:parentActivityName=".ui.FieldServiceGroupsActivity" />
+
+        <activity
+            android:name=".ui.OfficialFormsActivity"
+            android:label="Formularios Oficiales"
+            android:parentActivityName=".ui.MainActivity" />
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.fileprovider"

@@ -83,6 +83,21 @@ class MainActivity : AppCompatActivity() {
             startActivityWithAnimation(StatisticsActivity::class.java)
         }
 
+        binding.cardGroups.setOnClickListener {
+            animateCardClick(it)
+            startActivityWithAnimation(FieldServiceGroupsActivity::class.java)
+        }
+
+        binding.cardComparative.setOnClickListener {
+            animateCardClick(it)
+            startActivityWithAnimation(ComparativeReportsActivity::class.java)
+        }
+
+        binding.cardForms.setOnClickListener {
+            animateCardClick(it)
+            startActivityWithAnimation(OfficialFormsActivity::class.java)
+        }
+
         // FAB for quick report
         binding.fabQuickReport.setOnClickListener {
             showQuickReportBottomSheet()
