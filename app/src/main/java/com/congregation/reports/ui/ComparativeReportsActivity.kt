@@ -36,27 +36,32 @@ class ComparativeReportsActivity : AppCompatActivity() {
     private var currentMonth: Int = Calendar.getInstance().get(Calendar.MONTH) + 1
     private var currentYear: Int = Calendar.getInstance().get(Calendar.YEAR)
 
-    // Cache for comparison data
-    private var currentMonthHours = 0
-    private var prevMonthHours = 0
-    private var currentMonthReports = 0
-    private var prevMonthReports = 0
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityComparativeReportsBinding.inflate(layoutInflater)
-        setContentView(binding.root)
 
-        setSupportActionBar(binding.toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        binding.toolbar.setNavigationOnClickListener { finish() }
+        try {
+            binding = ActivityComparativeReportsBinding.inflate(layoutInflater)
+            setContentView(binding.root)
 
-        reportViewModel = ViewModelProvider(this)[ReportViewModel::class.java]
-        publisherViewModel = ViewModelProvider(this)[PublisherViewModel::class.java]
+            setSupportActionBar(binding.toolbar)
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            binding.toolbar.setNavigationOnClickListener { finish() }
 
-        setupRecyclerView()
-        setupMonthNavigation()
-        loadData()
+            reportViewModel = ViewModelProvider(this)[ReportViewModel::class.java]
+            publisherViewModel = ViewModelProvider(this)[PublisherViewModel::class.java]
+
+            setupRecyclerView()
+            setupMonthNavigation()
+            setupInitialData()
+            loadData()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            Snackbar.make(
+                findViewById(android.R.id.content),
+                "Error al cargar la pantalla: ${e.message}",
+                Snackbar.LENGTH_LONG
+            ).show()
+        }
     }
 
     private fun setupRecyclerView() {
@@ -79,6 +84,18 @@ class ComparativeReportsActivity : AppCompatActivity() {
         updateMonthDisplay()
     }
 
+    private fun setupInitialData() {
+        // Set default values to prevent crashes
+        binding.textHoursComparison.text = "0 hrs"
+        binding.textHoursTrend.text = "—"
+        binding.textReportsComparison.text = "0"
+        binding.textReportsTrend.text = "—"
+        binding.textAverageHours.text = "0 hrs"
+        binding.textAnnualSummary.text = "Total del año: 0 horas"
+        binding.textMonthlyAverage.text = "Promedio mensual: 0 horas"
+        binding.textNoIrregular.visibility = View.VISIBLE
+    }
+
     private fun navigateMonth(offset: Int) {
         currentMonth += offset
         if (currentMonth > 12) {
@@ -94,113 +111,126 @@ class ComparativeReportsActivity : AppCompatActivity() {
     }
 
     private fun updateMonthDisplay() {
-        val calendar = Calendar.getInstance()
-        calendar.set(Calendar.MONTH, currentMonth - 1)
-        calendar.set(Calendar.YEAR, currentYear)
+        try {
+            val calendar = Calendar.getInstance()
+            calendar.set(Calendar.MONTH, currentMonth - 1)
+            calendar.set(Calendar.YEAR, currentYear)
 
-        val monthFormat = SimpleDateFormat("MMMM yyyy", Locale("es", "ES"))
-        binding.textCurrentMonth.text = monthFormat.format(calendar.time)
-            .replaceFirstChar { it.uppercase() }
+            val monthFormat = SimpleDateFormat("MMMM yyyy", Locale("es", "ES"))
+            binding.textCurrentMonth.text = monthFormat.format(calendar.time)
+                .replaceFirstChar { it.uppercase() }
+        } catch (e: Exception) {
+            binding.textCurrentMonth.text = "Mes $currentMonth - $currentYear"
+        }
     }
 
     private fun loadData() {
-        // Calculate previous month
-        var prevMonth = currentMonth - 1
-        var prevYear = currentYear
-        if (prevMonth < 1) {
-            prevMonth = 12
-            prevYear--
-        }
-
-        // Load hours for current month
-        reportViewModel.getTotalHoursForMonth(currentMonth, currentYear).observe(this) { hours ->
-            currentMonthHours = hours ?: 0
-            updateHoursComparison(currentMonthHours, prevMonthHours)
-        }
-
-        // Load hours for previous month
-        reportViewModel.getTotalHoursForMonth(prevMonth, prevYear).observe(this) { hours ->
-            prevMonthHours = hours ?: 0
-            updateHoursComparison(currentMonthHours, prevMonthHours)
-        }
-
-        // Load reports count for current month
-        reportViewModel.getReportsCountForMonth(currentMonth, currentYear).observe(this) { count ->
-            currentMonthReports = count ?: 0
-            updateReportsComparison(currentMonthReports, prevMonthReports)
-        }
-
-        // Load reports count for previous month
-        reportViewModel.getReportsCountForMonth(prevMonth, prevYear).observe(this) { count ->
-            prevMonthReports = count ?: 0
-            updateReportsComparison(currentMonthReports, prevMonthReports)
-        }
-
-        // Calculate average hours per publisher
-        publisherViewModel.activePublishersCount.observe(this) { publisherCount ->
-            val avgHours = if (publisherCount != null && publisherCount > 0 && currentMonthHours > 0) {
-                String.format("%.1f hrs", currentMonthHours.toFloat() / publisherCount)
-            } else {
-                "0 hrs"
+        try {
+            // Calculate previous month
+            var prevMonth = currentMonth - 1
+            var prevYear = currentYear
+            if (prevMonth < 1) {
+                prevMonth = 12
+                prevYear--
             }
-            binding.textAverageHours.text = avgHours
+
+            // Load hours for current month
+            reportViewModel.getTotalHoursForMonth(currentMonth, currentYear).observe(this) { currentHours ->
+                val hours = currentHours ?: 0
+                binding.textHoursComparison.text = "$hours hrs"
+
+                // Load hours for previous month to compare
+                reportViewModel.getTotalHoursForMonth(prevMonth, prevYear).observe(this) { prevHours ->
+                    val previous = prevHours ?: 0
+                    updateHoursTrend(hours, previous)
+                }
+            }
+
+            // Load reports count for current month
+            reportViewModel.getReportsCountForMonth(currentMonth, currentYear).observe(this) { currentCount ->
+                val count = currentCount ?: 0
+                binding.textReportsComparison.text = count.toString()
+
+                // Load reports count for previous month to compare
+                reportViewModel.getReportsCountForMonth(prevMonth, prevYear).observe(this) { prevCount ->
+                    val previous = prevCount ?: 0
+                    updateReportsTrend(count, previous)
+                }
+            }
+
+            // Calculate average hours per publisher
+            var publisherCount = 1
+            var totalHours = 0
+
+            publisherViewModel.activePublishersCount.observe(this) { count ->
+                publisherCount = count ?: 1
+                val avgHours = if (publisherCount > 0 && totalHours > 0) {
+                    String.format("%.1f hrs", totalHours.toFloat() / publisherCount)
+                } else {
+                    "0 hrs"
+                }
+                binding.textAverageHours.text = avgHours
+            }
+
+            reportViewModel.getTotalHoursForMonth(currentMonth, currentYear).observe(this) { hours ->
+                totalHours = hours ?: 0
+                val avgHours = if (publisherCount > 0 && totalHours > 0) {
+                    String.format("%.1f hrs", totalHours.toFloat() / publisherCount)
+                } else {
+                    "0 hrs"
+                }
+                binding.textAverageHours.text = avgHours
+            }
+
+            // Show no irregular publishers message
+            irregularPublishersAdapter.submitList(emptyList())
+            binding.textNoIrregular.visibility = View.VISIBLE
+
+        } catch (e: Exception) {
+            e.printStackTrace()
         }
-
-        // Load annual summary
-        binding.textAnnualSummary.text = "Total del año: calculando..."
-        binding.textMonthlyAverage.text = "Promedio mensual: calculando..."
-
-        // Load irregular publishers
-        irregularPublishersAdapter.submitList(emptyList())
-        binding.textNoIrregular.visibility = View.VISIBLE
     }
 
-    private fun updateHoursComparison(current: Int, previous: Int) {
-        binding.textHoursComparison.text = "$current hrs"
-
+    private fun updateHoursTrend(current: Int, previous: Int) {
         if (previous > 0) {
             val percentChange = ((current - previous).toFloat() / previous * 100).toInt()
-            val trend = when {
+            when {
                 percentChange > 0 -> {
                     binding.textHoursTrend.setTextColor(getColor(R.color.success))
-                    "↑ $percentChange%"
+                    binding.textHoursTrend.text = "↑ $percentChange%"
                 }
                 percentChange < 0 -> {
                     binding.textHoursTrend.setTextColor(getColor(R.color.error))
-                    "↓ ${-percentChange}%"
+                    binding.textHoursTrend.text = "↓ ${-percentChange}%"
                 }
                 else -> {
                     binding.textHoursTrend.setTextColor(getColor(R.color.text_secondary))
-                    "— 0%"
+                    binding.textHoursTrend.text = "— 0%"
                 }
             }
-            binding.textHoursTrend.text = trend
         } else {
             binding.textHoursTrend.text = "—"
             binding.textHoursTrend.setTextColor(getColor(R.color.text_secondary))
         }
     }
 
-    private fun updateReportsComparison(current: Int, previous: Int) {
-        binding.textReportsComparison.text = current.toString()
-
+    private fun updateReportsTrend(current: Int, previous: Int) {
         if (previous > 0) {
             val percentChange = ((current - previous).toFloat() / previous * 100).toInt()
-            val trend = when {
+            when {
                 percentChange > 0 -> {
                     binding.textReportsTrend.setTextColor(getColor(R.color.success))
-                    "↑ $percentChange%"
+                    binding.textReportsTrend.text = "↑ $percentChange%"
                 }
                 percentChange < 0 -> {
                     binding.textReportsTrend.setTextColor(getColor(R.color.error))
-                    "↓ ${-percentChange}%"
+                    binding.textReportsTrend.text = "↓ ${-percentChange}%"
                 }
                 else -> {
                     binding.textReportsTrend.setTextColor(getColor(R.color.text_secondary))
-                    "— 0%"
+                    binding.textReportsTrend.text = "— 0%"
                 }
             }
-            binding.textReportsTrend.text = trend
         } else {
             binding.textReportsTrend.text = "—"
             binding.textReportsTrend.setTextColor(getColor(R.color.text_secondary))
@@ -249,7 +279,6 @@ class ComparativeReportsActivity : AppCompatActivity() {
                 val pdfFile = withContext(Dispatchers.IO) {
                     val pdfGenerator = PDFGenerator(this@ComparativeReportsActivity)
 
-                    // Get data synchronously from database
                     val database = com.congregation.reports.data.AppDatabase.getDatabase(this@ComparativeReportsActivity)
                     val publishers = database.publisherDao().getActivePublishersSync()
                     val reports = database.reportDao().getReportsForMonthSync(currentMonth, currentYear)
@@ -287,6 +316,7 @@ class ComparativeReportsActivity : AppCompatActivity() {
                     ).show()
                 }
             } catch (e: Exception) {
+                e.printStackTrace()
                 Snackbar.make(
                     binding.root,
                     "Error: ${e.message}",
@@ -335,6 +365,7 @@ class ComparativeReportsActivity : AppCompatActivity() {
                     ).show()
                 }
             } catch (e: Exception) {
+                e.printStackTrace()
                 Snackbar.make(
                     binding.root,
                     "Error: ${e.message}",
