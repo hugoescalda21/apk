@@ -310,7 +310,7 @@ object PdfFieldFiller {
             val form = PdfAcroForm.getAcroForm(pdfDocument, false)
 
             val fieldNames = mutableListOf<String>()
-            form?.allFormFields?.forEach { (name, _) ->
+            form?.formFields?.keys?.forEach { name ->
                 fieldNames.add(name)
             }
 
