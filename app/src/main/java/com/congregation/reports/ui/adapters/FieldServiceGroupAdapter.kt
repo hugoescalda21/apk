@@ -8,10 +8,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.congregation.reports.data.FieldServiceGroup
 import com.congregation.reports.data.Publisher
 import com.congregation.reports.databinding.ItemFieldServiceGroupBinding
-import com.congregation.reports.viewmodel.PublisherViewModel
 
 class FieldServiceGroupAdapter(
-    private val publisherViewModel: PublisherViewModel,
     private val onClick: (FieldServiceGroup) -> Unit
 ) : ListAdapter<FieldServiceGroup, FieldServiceGroupAdapter.GroupViewHolder>(GroupDiffCallback()) {
 

@@ -37,7 +37,7 @@ class FieldServiceGroupsActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        adapter = FieldServiceGroupAdapter(publisherViewModel) { group ->
+        adapter = FieldServiceGroupAdapter { group ->
             val intent = Intent(this, FieldServiceGroupDetailActivity::class.java)
             intent.putExtra("GROUP_ID", group.id)
             startActivity(intent)
