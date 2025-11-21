@@ -5,6 +5,9 @@ import androidx.room.*
 
 @Dao
 interface ReportDao {
+    @Query("SELECT * FROM reports ORDER BY year DESC, month DESC")
+    fun getAllReports(): LiveData<List<Report>>
+
     @Query("SELECT * FROM reports WHERE month = :month AND year = :year ORDER BY publisherId")
     fun getReportsByMonth(month: Int, year: Int): LiveData<List<Report>>
 

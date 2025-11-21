@@ -11,10 +11,12 @@ import kotlinx.coroutines.launch
 
 class ReportViewModel(application: Application) : AndroidViewModel(application) {
     private val repository: ReportRepository
+    val allReports: LiveData<List<Report>>
 
     init {
         val reportDao = AppDatabase.getDatabase(application).reportDao()
         repository = ReportRepository(reportDao)
+        allReports = repository.getAllReports()
     }
 
     fun getReportsByMonth(month: Int, year: Int): LiveData<List<Report>> {

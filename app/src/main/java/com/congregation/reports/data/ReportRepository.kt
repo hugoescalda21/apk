@@ -3,6 +3,10 @@ package com.congregation.reports.data
 import androidx.lifecycle.LiveData
 
 class ReportRepository(private val reportDao: ReportDao) {
+    fun getAllReports(): LiveData<List<Report>> {
+        return reportDao.getAllReports()
+    }
+
     fun getReportsByMonth(month: Int, year: Int): LiveData<List<Report>> {
         return reportDao.getReportsByMonth(month, year)
     }
