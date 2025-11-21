@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.congregation.reports.data.Publisher
 import com.congregation.reports.databinding.ActivityOfficialFormsBinding
 import com.congregation.reports.utils.OfficialFormsGenerator
+import com.congregation.reports.utils.PdfFormsManager
 import com.congregation.reports.viewmodel.PublisherViewModel
 import kotlinx.coroutines.launch
 
@@ -35,6 +36,21 @@ class OfficialFormsActivity : AppCompatActivity() {
 
         loadPublishers()
         setupButtons()
+        checkPdfsStatus()
+    }
+
+    private fun checkPdfsStatus() {
+        if (!PdfFormsManager.areAllPdfsLoaded(this)) {
+            AlertDialog.Builder(this)
+                .setTitle("📄 PDFs No Cargados")
+                .setMessage("Para generar formularios oficiales, primero debes cargar los PDFs en:\n\nConfiguración → Seguridad → Formularios PDF Oficiales\n\n¿Deseas ir ahora?")
+                .setPositiveButton("Ir a Configuración") { _, _ ->
+                    val intent = Intent(this, SecuritySettingsActivity::class.java)
+                    startActivity(intent)
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
+        }
     }
 
     private fun loadPublishers() {
@@ -48,140 +64,117 @@ class OfficialFormsActivity : AppCompatActivity() {
     private fun setupButtons() {
         // S-21: Registro de Publicadores
         binding.cardS21.setOnClickListener {
-            generateS21Form()
-        }
-
-        // S-88: Solicitud de Publicador No Bautizado
-        binding.cardS88.setOnClickListener {
-            showPublisherSelectorDialog { publisher ->
-                generateS88Form(publisher)
+            if (PdfFormsManager.isS21PdfLoaded(this)) {
+                generateS21Form()
+            } else {
+                showPdfNotLoadedDialog("S-21")
             }
         }
 
-        // S-1: Solicitud de Precursor
-        binding.cardS1.setOnClickListener {
-            showPioneerTypeDialog()
+        // S-88: Registro de Asistencia
+        binding.cardS88.setOnClickListener {
+            if (PdfFormsManager.isS88PdfLoaded(this)) {
+                generateS88Form()
+            } else {
+                showPdfNotLoadedDialog("S-88")
+            }
         }
+
+        // S-1: Informe de Predicación
+        binding.cardS1.setOnClickListener {
+            if (PdfFormsManager.isS1PdfLoaded(this)) {
+                generateS1Form()
+            } else {
+                showPdfNotLoadedDialog("S-1")
+            }
+        }
+    }
+
+    private fun showPdfNotLoadedDialog(formName: String) {
+        AlertDialog.Builder(this)
+            .setTitle("PDF No Cargado")
+            .setMessage("El formulario $formName no ha sido cargado.\n\nVe a Configuración → Seguridad → Formularios PDF para cargarlo.")
+            .setPositiveButton("Ir a Configuración") { _, _ ->
+                val intent = Intent(this, SecuritySettingsActivity::class.java)
+                startActivity(intent)
+            }
+            .setNegativeButton("Cancelar", null)
+            .show()
     }
 
     private fun generateS21Form() {
         lifecycleScope.launch {
             Toast.makeText(this@OfficialFormsActivity, "Generando S-21...", Toast.LENGTH_SHORT).show()
 
-            val file = formsGenerator.generateS21Form(
-                allPublishers,
-                "Congregación Central" // Puedes hacerlo configurable
-            )
-
-            if (file != null) {
+            // TODO: Implementar llenado de PDF S-21 con datos reales
+            // Por ahora solo comparte el PDF original
+            val pdfFile = PdfFormsManager.getS21PdfFile(this@OfficialFormsActivity)
+            if (pdfFile != null) {
                 Toast.makeText(
                     this@OfficialFormsActivity,
-                    "S-21 generado exitosamente",
+                    "S-21 listo (próximamente se rellenará automáticamente)",
                     Toast.LENGTH_LONG
                 ).show()
-
-                shareFile(file, "application/pdf")
+                shareFile(pdfFile, "application/pdf")
             } else {
                 Toast.makeText(
                     this@OfficialFormsActivity,
-                    "Error al generar S-21",
+                    "Error: PDF no encontrado",
                     Toast.LENGTH_SHORT
                 ).show()
             }
         }
     }
 
-    private fun generateS88Form(publisher: Publisher) {
+    private fun generateS88Form() {
         lifecycleScope.launch {
             Toast.makeText(this@OfficialFormsActivity, "Generando S-88...", Toast.LENGTH_SHORT).show()
 
-            val file = formsGenerator.generateS88Form(
-                publisher,
-                "Congregación Central"
-            )
-
-            if (file != null) {
+            // TODO: Implementar llenado de PDF S-88 con datos reales
+            // Por ahora solo comparte el PDF original
+            val pdfFile = PdfFormsManager.getS88PdfFile(this@OfficialFormsActivity)
+            if (pdfFile != null) {
                 Toast.makeText(
                     this@OfficialFormsActivity,
-                    "S-88 generado exitosamente",
+                    "S-88 listo (próximamente se rellenará automáticamente)",
                     Toast.LENGTH_LONG
                 ).show()
-
-                shareFile(file, "application/pdf")
+                shareFile(pdfFile, "application/pdf")
             } else {
                 Toast.makeText(
                     this@OfficialFormsActivity,
-                    "Error al generar S-88",
+                    "Error: PDF no encontrado",
                     Toast.LENGTH_SHORT
                 ).show()
             }
         }
     }
 
-    private fun generateS1Form(publisher: Publisher, pioneerType: String) {
+    private fun generateS1Form() {
         lifecycleScope.launch {
             Toast.makeText(this@OfficialFormsActivity, "Generando S-1...", Toast.LENGTH_SHORT).show()
 
-            val file = formsGenerator.generateS1Form(
-                publisher,
-                "Congregación Central",
-                pioneerType
-            )
-
-            if (file != null) {
+            // TODO: Implementar llenado de PDF S-1 con datos reales
+            // Por ahora solo comparte el PDF original
+            val pdfFile = PdfFormsManager.getS1PdfFile(this@OfficialFormsActivity)
+            if (pdfFile != null) {
                 Toast.makeText(
                     this@OfficialFormsActivity,
-                    "S-1 generado exitosamente",
+                    "S-1 listo (próximamente se rellenará automáticamente)",
                     Toast.LENGTH_LONG
                 ).show()
-
-                shareFile(file, "application/pdf")
+                shareFile(pdfFile, "application/pdf")
             } else {
                 Toast.makeText(
                     this@OfficialFormsActivity,
-                    "Error al generar S-1",
+                    "Error: PDF no encontrado",
                     Toast.LENGTH_SHORT
                 ).show()
             }
         }
     }
 
-    private fun showPublisherSelectorDialog(onSelected: (Publisher) -> Unit) {
-        if (allPublishers.isEmpty()) {
-            Toast.makeText(this, "No hay publicadores registrados", Toast.LENGTH_SHORT).show()
-            return
-        }
-
-        val publisherNames = allPublishers.map { it.name }.toTypedArray()
-
-        AlertDialog.Builder(this)
-            .setTitle("Seleccionar Publicador")
-            .setItems(publisherNames) { _, which ->
-                onSelected(allPublishers[which])
-            }
-            .setNegativeButton("Cancelar", null)
-            .show()
-    }
-
-    private fun showPioneerTypeDialog() {
-        val types = arrayOf(
-            "Precursor Regular",
-            "Precursor Auxiliar"
-        )
-
-        AlertDialog.Builder(this)
-            .setTitle("Tipo de Precursor")
-            .setItems(types) { _, which ->
-                val pioneerType = types[which]
-                showPublisherSelectorDialog { publisher ->
-                    generateS1Form(publisher, pioneerType)
-                }
-            }
-            .setNegativeButton("Cancelar", null)
-            .show()
-    }
-
-    private fun shareFile(file: java.io.File, mimeType: String) {
+    private fun shareFile(file: File, mimeType: String) {
         val uri = FileProvider.getUriForFile(
             this,
             "${packageName}.fileprovider",
